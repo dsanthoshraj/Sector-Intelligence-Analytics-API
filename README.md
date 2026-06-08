@@ -31,7 +31,7 @@ A high-performance FastAPI backend service for strategic sector intelligence and
 ### Prerequisites
 - Python 3.10 or higher
 - MongoDB 4.4+
-- pip or conda
+- [uv](https://docs.astral.sh/uv/) package manager
 
 ### Setup
 
@@ -41,24 +41,17 @@ git clone <repository-url>
 cd backend
 ```
 
-2. **Create virtual environment**
+2. **Install dependencies with uv**
 ```bash
-python -m venv .venv
+uv sync
+```
+
+3. **Activate virtual environment**
+```bash
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-3. **Install dependencies**
-```bash
-pip install -r requirements.txt
-```
-
-4. **Configure environment**
-```bash
-cp .env.example .env
-# Edit .env with your MongoDB connection string and database name
-```
-
-5. **Start the server**
+4. **Start the server**
 ```bash
 uvicorn main:app --reload
 ```
@@ -125,7 +118,7 @@ Content-Type: application/json
 backend/
 ├── main.py                 # FastAPI app initialization & lifespan
 ├── config.py               # Configuration management
-├── requirements.txt        # Python dependencies
+├── pyproject.toml          # Project metadata and dependencies
 ├── README.md              # This file
 ├── model/
 │   ├── __init__.py
@@ -137,19 +130,21 @@ backend/
 
 ## 📦 Dependencies
 
+All dependencies are managed in `pyproject.toml`. Key packages:
+
 - **fastapi** - Web framework
 - **uvicorn** - ASGI server
 - **pymongo** - MongoDB async driver
 - **pydantic** - Data validation
 - **python-dateutil** - DateTime parsing utilities
 
-## 🔐 Environment Variables
+## 🔐 Configuration
 
-Create a `.env` file with:
+Update `config.py` with your MongoDB settings:
 
-```env
-MONGODB_URL=mongodb://localhost:27017/
-DATABASE_NAME=insights_db
+```python
+MONGODB_URL = "mongodb://localhost:27017/"
+DATABASE_NAME = "insights_db"
 ```
 
 ## 💡 Model Features
@@ -179,17 +174,17 @@ The `Sector` model includes intelligent validators:
 
 ### Running Tests
 ```bash
-pytest
+uv run pytest
 ```
 
 ### Code Formatting
 ```bash
-black .
+uv run black .
 ```
 
 ### Linting
 ```bash
-pylint Routers/ model/
+uv run pylint Routers/ model/
 ```
 
 ## 🐛 Troubleshooting
